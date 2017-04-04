@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using DotNetOpenAuth.AspNet.Clients;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace DotNetOpenAuth.FacebookOAuth2
 {
@@ -143,9 +144,9 @@ namespace DotNetOpenAuth.FacebookOAuth2
                 using (var reader = new StreamReader(responseStream))
                 {
                     var response = reader.ReadToEnd();
-
-                    var results = HttpUtility.ParseQueryString(response);
-                    return results["access_token"];
+                    var json = JObject.Parse(response);
+                    var accessToken = json.Value<string>("access_token");
+                    return accessToken;
                 }
             }
         }
